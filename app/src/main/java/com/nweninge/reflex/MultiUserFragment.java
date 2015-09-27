@@ -3,6 +3,7 @@ package com.nweninge.reflex;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -53,14 +54,60 @@ public class MultiUserFragment extends Fragment {
         getActivity().findViewById(R.id.tablelayout).setVisibility(View.INVISIBLE);
         new AlertDialog.Builder(getActivity())
                 .setTitle("How many players?")
-                .setItems(new CharSequence[] {"2" ,"3", "4"}, new DialogInterface.OnClickListener() {
+                .setItems(new CharSequence[]{"2", "3", "4"}, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        setNumPlayers(4-which);
+                        setNumPlayers(4 - which);
                         getActivity().findViewById(R.id.tablelayout).setVisibility(View.VISIBLE);
                         showHelp();
                     }
                 })
                 .show();
+        reset();
+        setReactListeners();
+    }
+
+    private void reset() {
+        for (int i = 1; i <= 4; i++) {
+            getPlayerButton(i).setBackgroundColor(Color.BLACK);
+        }
+    }
+
+    private void react(int player) {
+        getPlayerButton(player).setBackgroundColor(Color.GREEN);
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Player " + player + " wins.")
+                .setNeutralButton("Next round", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        reset();
+                    }
+                }).show();
+    }
+
+    private void setReactListeners() {
+        for (int i = 1; i <= 4; i++) {
+            final int j = i;
+            getPlayerButton(i).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    react(j);
+                }
+            });
+        }
+    }
+
+    private View getPlayerButton(int player) {
+        switch (player) {
+            case 1:
+                return getActivity().findViewById(R.id.button1);
+            case 2:
+                return getActivity().findViewById(R.id.button2);
+            case 3:
+                return getActivity().findViewById(R.id.button3);
+            case 4:
+                return getActivity().findViewById(R.id.button4);
+        }
+        return null;
     }
 
     private void showHelp() {

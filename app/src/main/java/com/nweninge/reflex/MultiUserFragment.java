@@ -55,6 +55,7 @@ public class MultiUserFragment extends Fragment {
         new AlertDialog.Builder(getActivity())
                 .setTitle("How many players?")
                 .setItems(new CharSequence[]{"2", "3", "4"}, new DialogInterface.OnClickListener() {
+                    @Override
                     public void onClick(DialogInterface dialog, int which) {
                         setNumPlayers(4 - which);
                         getActivity().findViewById(R.id.tablelayout).setVisibility(View.VISIBLE);
@@ -77,8 +78,14 @@ public class MultiUserFragment extends Fragment {
         new AlertDialog.Builder(getActivity())
                 .setTitle("Player " + player + " wins.")
                 .setNeutralButton("Next round", new DialogInterface.OnClickListener() {
+                    @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                        reset();
+                    }
+                }).setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
                         reset();
                     }
                 }).show();
@@ -115,6 +122,7 @@ public class MultiUserFragment extends Fragment {
                 .setTitle("Help")
                 .setMessage("Whoever presses their button first wins.")
                 .setNeutralButton("Start", new DialogInterface.OnClickListener() {
+                    @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }

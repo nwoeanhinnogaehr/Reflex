@@ -95,6 +95,7 @@ public class SingleUserFragment extends Fragment {
                 .setTitle("Help")
                 .setMessage("Tap when the screen turns green.")
                 .setNeutralButton("Start", new DialogInterface.OnClickListener() {
+                    @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         startTimer();
@@ -139,6 +140,7 @@ public class SingleUserFragment extends Fragment {
         }
         ad.setMessage("Your score was " + record.getScore() + ".");
         ad.setNeutralButton("Try again", new DialogInterface.OnClickListener() {
+            @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 startTimer();

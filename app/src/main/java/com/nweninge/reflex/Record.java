@@ -6,19 +6,19 @@ import java.io.Serializable;
  * Created by nweninge on 9/26/15.
  */
 public abstract class Record implements Serializable {
-    private double delayTime;
-    private double pressTime;
+    private long delayTime;
+    private long pressTime;
 
-    public Record(double delayTime, double pressTime) {
+    public Record(long delayTime, long pressTime) {
         this.delayTime = delayTime;
         this.pressTime = pressTime;
     }
 
-    public double getDelayTime() {
+    public long getDelayTime() {
         return delayTime;
     }
 
-    public double getPressTime() {
+    public long getPressTime() {
         return pressTime;
     }
 
@@ -27,7 +27,7 @@ public abstract class Record implements Serializable {
     }
 
     // Closer to zero is better
-    public double getScore() {
+    public long getScore() {
         return pressTime - delayTime;
     }
 }

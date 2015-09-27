@@ -7,7 +7,7 @@ public class MultiUserRecord extends Record {
     private int numUsers;
     private int fastestUser;
 
-    public MultiUserRecord(double delayTime, double pressTime, int numUsers, int fastestUser) {
+    public MultiUserRecord(long delayTime, long pressTime, int numUsers, int fastestUser) {
         super(delayTime, pressTime);
         this.numUsers = numUsers;
         this.fastestUser = fastestUser;

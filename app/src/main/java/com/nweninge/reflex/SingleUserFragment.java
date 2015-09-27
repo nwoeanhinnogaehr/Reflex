@@ -3,11 +3,18 @@ package com.nweninge.reflex;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import java.util.Date;
+import java.util.Random;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,9 +23,14 @@ import android.view.ViewGroup;
  */
 public class SingleUserFragment extends Fragment {
     private static final String ARG_DB = "database";
+    private static final int TRIGGER_EVENT = 1;
 
     private RecordDatabase recordDb;
-
+    private Random random;
+    private Handler handler;
+    private long triggerTime;
+    private long tapTime;
+    private boolean tapped;
 
     /**
      * Use this factory method to create a new instance of
@@ -36,7 +48,18 @@ public class SingleUserFragment extends Fragment {
     }
 
     public SingleUserFragment() {
-        // Required empty public constructor
+        random = new Random();
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                case TRIGGER_EVENT:
+                    trigger();
+                    break;
+                }
+            }
+        };
+        tapped = false;
     }
 
     @Override
@@ -49,15 +72,14 @@ public class SingleUserFragment extends Fragment {
 
     @Override
     public void onResume() {
-        new AlertDialog.Builder(getActivity())
-                .setTitle("Help")
-                .setMessage("Tap when the screen turns green. If you tap too soon, it will turn red.")
-                .setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).show();
         super.onResume();
+        getActivity().findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                react();
+            }
+        });
+        showHelp();
     }
 
     @Override
@@ -65,5 +87,66 @@ public class SingleUserFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_single_user, container, false);
+    }
+
+    private void showHelp() {
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Help")
+                .setMessage("Tap when the screen turns green.")
+                .setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        startTimer();
+                    }
+                }).show();
+    }
+
+    private void startTimer() {
+        tapped = false;
+        long delay = getRandomDelay();
+        setTriggerDelay(delay);
+    }
+
+    private void setTriggerDelay(long delay) {
+        triggerTime = new Date().getTime() + delay;
+        Message msg = handler.obtainMessage(TRIGGER_EVENT);
+        handler.sendMessageDelayed(msg, delay);
+    }
+
+    private void trigger() {
+        if (!tapped) {
+            setColor(Color.GREEN);
+        }
+    }
+
+    private void react() {
+        tapTime = new Date().getTime();
+        tapped = true;
+        Record record = new SingleUserRecord(triggerTime, tapTime);
+        recordDb.addRecord(record);
+        AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
+        if (!record.isOk()) {
+            setColor(Color.RED);
+            ad.setTitle("Too quick!");
+        } else {
+            setColor(Color.BLACK);
+            ad.setTitle("COOL!");
+        }
+        ad.setMessage("Your score was " + record.getScore() + ".");
+        ad.setNeutralButton("Try again", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                startTimer();
+            }
+        });
+        ad.show();
+    }
+
+    private void setColor(int color) {
+        getActivity().findViewById(R.id.button).setBackgroundColor(color);
+    }
+
+    private long getRandomDelay() {
+        return random.nextInt(1990) + 10;
     }
 }

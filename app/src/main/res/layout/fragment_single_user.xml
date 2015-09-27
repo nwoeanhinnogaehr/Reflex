@@ -2,4 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" tools:context="com.nweninge.reflex.SingleUserFragment">
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/button"
+        android:layout_gravity="center"
+        android:background="#000" />
 </FrameLayout>

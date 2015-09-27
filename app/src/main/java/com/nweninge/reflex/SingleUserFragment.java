@@ -1,6 +1,8 @@
 package com.nweninge.reflex;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -43,6 +45,15 @@ public class SingleUserFragment extends Fragment {
         if (getArguments() != null) {
             recordDb = (RecordDatabase)getArguments().getSerializable(ARG_DB);
         }
+
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Help")
+                .setMessage("Tap when the screen turns green. If you tap too soon, it will turn red.")
+                .setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
     }
 
     @Override

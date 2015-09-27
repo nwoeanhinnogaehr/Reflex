@@ -1,6 +1,8 @@
 package com.nweninge.reflex;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -46,9 +48,46 @@ public class MultiUserFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().findViewById(R.id.tablelayout).setVisibility(View.INVISIBLE);
+        new AlertDialog.Builder(getActivity())
+                .setTitle("How many players?")
+                .setItems(new CharSequence[] {"2" ,"3", "4"}, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        setNumPlayers(4-which);
+                        getActivity().findViewById(R.id.tablelayout).setVisibility(View.VISIBLE);
+                        showHelp();
+                    }
+                })
+                .show();
+    }
+
+    private void showHelp() {
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Help")
+                .setMessage("Whoever presses their button first wins.")
+                .setNeutralButton("Start", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_multi_user, container, false);
+    }
+
+    private void setNumPlayers(int numPlayers) {
+        getActivity().findViewById(R.id.button4).setVisibility(View.VISIBLE);
+        getActivity().findViewById(R.id.tablerow2).setVisibility(View.VISIBLE);
+        if (numPlayers == 3) {
+            getActivity().findViewById(R.id.button4).setVisibility(View.GONE);
+        } else if (numPlayers == 4) {
+            getActivity().findViewById(R.id.tablerow2).setVisibility(View.GONE);
+        }
     }
 }

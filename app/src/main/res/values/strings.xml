@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Reflex</string>
+
+    <string name="title_section1">Reaction timer</string>
+    <string name="title_section2">Gameshow buzzer</string>
+    <string name="title_section3">Statistics</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+</resources>

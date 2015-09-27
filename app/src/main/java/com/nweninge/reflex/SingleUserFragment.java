@@ -45,7 +45,10 @@ public class SingleUserFragment extends Fragment {
         if (getArguments() != null) {
             recordDb = (RecordDatabase)getArguments().getSerializable(ARG_DB);
         }
+    }
 
+    @Override
+    public void onResume() {
         new AlertDialog.Builder(getActivity())
                 .setTitle("Help")
                 .setMessage("Tap when the screen turns green. If you tap too soon, it will turn red.")
@@ -54,6 +57,7 @@ public class SingleUserFragment extends Fragment {
                         dialog.dismiss();
                     }
                 }).show();
+        super.onResume();
     }
 
     @Override
@@ -62,6 +66,4 @@ public class SingleUserFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_single_user, container, false);
     }
-
-
 }

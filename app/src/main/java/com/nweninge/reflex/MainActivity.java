@@ -33,6 +33,7 @@ public class MainActivity extends Activity
     private CharSequence mTitle;
 
     private RecordDatabase recordDb;
+    private boolean itemSelected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,6 @@ public class MainActivity extends Activity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
         recordDb = new RecordDatabase();
 
         // Set up the drawer.
@@ -55,36 +55,32 @@ public class MainActivity extends Activity
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
         Fragment fragment;
-        switch (position) {
-            default:
-            case 0:
-                fragment = SingleUserFragment.newInstance(recordDb);
-                break;
-            case 1:
-                fragment = MultiUserFragment.newInstance(recordDb);
-                break;
-            case 2:
-                fragment = StatsFragment.newInstance(recordDb);
-                break;
+        if (itemSelected) {
+            switch (position) {
+                default:
+                case 0:
+                    fragment = SingleUserFragment.newInstance(recordDb);
+                    mTitle = getString(R.string.title_section1);
+                    break;
+                case 1:
+                    fragment = MultiUserFragment.newInstance(recordDb);
+                    mTitle = getString(R.string.title_section2);
+                    break;
+                case 2:
+                    fragment = StatsFragment.newInstance(recordDb);
+                    mTitle = getString(R.string.title_section3);
+                    break;
 
+            }
+        } else {
+            mTitle = getTitle();
+            fragment = new BlankFragment();
         }
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit();
-    }
-
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                mTitle = getString(R.string.title_section1);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_section2);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
-        }
+        getActionBar().setTitle(mTitle);
+        itemSelected = true;
     }
 
     public void restoreActionBar() {
@@ -93,7 +89,6 @@ public class MainActivity extends Activity
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

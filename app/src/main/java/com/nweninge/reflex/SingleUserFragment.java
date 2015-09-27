@@ -128,7 +128,7 @@ public class SingleUserFragment extends Fragment {
         }
         tapTime = new Date().getTime();
         tapped = true;
-        Record record = new SingleUserRecord(triggerTime, tapTime);
+        SingleUserRecord record = new SingleUserRecord(triggerTime, tapTime);
         recordDb.addRecord(record);
         AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
         if (!record.isOk()) {

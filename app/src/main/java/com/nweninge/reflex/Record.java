@@ -1,9 +1,11 @@
 package com.nweninge.reflex;
 
+import java.io.Serializable;
+
 /**
  * Created by nweninge on 9/26/15.
  */
-public abstract class Record {
+public abstract class Record implements Serializable {
     private double delayTime;
     private double pressTime;
 

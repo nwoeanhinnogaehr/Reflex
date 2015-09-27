@@ -31,6 +31,8 @@ public class MainActivity extends Activity
      */
     private CharSequence mTitle;
 
+    private RecordDatabase recordDb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +41,7 @@ public class MainActivity extends Activity
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
+        recordDb = new RecordDatabase();
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -54,13 +57,13 @@ public class MainActivity extends Activity
         switch (position) {
             default:
             case 0:
-                fragment = new SingleUserFragment();
+                fragment = SingleUserFragment.newInstance(recordDb);
                 break;
             case 1:
-                fragment = new MultiUserFragment();
+                fragment = MultiUserFragment.newInstance(recordDb);
                 break;
             case 2:
-                fragment = new StatsFragment();
+                fragment = StatsFragment.newInstance(recordDb);
                 break;
 
         }

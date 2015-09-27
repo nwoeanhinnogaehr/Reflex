@@ -49,6 +49,7 @@ public class SingleUserFragment extends Fragment {
 
     public SingleUserFragment() {
         random = new Random();
+        // http://stackoverflow.com/questions/1877417/how-to-set-a-timer-in-android
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -93,7 +94,7 @@ public class SingleUserFragment extends Fragment {
         new AlertDialog.Builder(getActivity())
                 .setTitle("Help")
                 .setMessage("Tap when the screen turns green.")
-                .setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                .setNeutralButton("Start", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         startTimer();

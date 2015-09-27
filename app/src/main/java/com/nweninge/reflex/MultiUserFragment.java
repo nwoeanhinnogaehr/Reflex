@@ -52,6 +52,12 @@ public class MultiUserFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getActivity().findViewById(R.id.tablelayout).setVisibility(View.INVISIBLE);
+        askNumPlayers();
+        reset();
+        setReactListeners();
+    }
+
+    private void askNumPlayers() {
         new AlertDialog.Builder(getActivity())
                 .setTitle("How many players?")
                 .setItems(new CharSequence[]{"2", "3", "4"}, new DialogInterface.OnClickListener() {
@@ -63,8 +69,6 @@ public class MultiUserFragment extends Fragment {
                     }
                 })
                 .show();
-        reset();
-        setReactListeners();
     }
 
     private void reset() {

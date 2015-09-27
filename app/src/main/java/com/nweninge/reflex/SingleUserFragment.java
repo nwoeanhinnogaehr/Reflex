@@ -121,6 +121,10 @@ public class SingleUserFragment extends Fragment {
     }
 
     private void react() {
+        if (tapped) {
+            showHelp();
+            return;
+        }
         tapTime = new Date().getTime();
         tapped = true;
         Record record = new SingleUserRecord(triggerTime, tapTime);

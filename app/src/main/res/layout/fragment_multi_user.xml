@@ -2,4 +2,62 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" tools:context="com.nweninge.reflex.MultiUserFragment">
 
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="1"
+                android:id="@+id/button1"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:textSize="64dp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="2"
+                android:id="@+id/button2"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:layout_weight="1"
+                android:textSize="64dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="3"
+                android:id="@+id/button3"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:layout_weight="1"
+                android:textSize="64dp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="4"
+                android:id="@+id/button4"
+                android:layout_row="1"
+                android:layout_column="1"
+                android:layout_weight="1"
+                android:textSize="64dp" />
+        </TableRow>
+    </TableLayout>
+
 </FrameLayout>

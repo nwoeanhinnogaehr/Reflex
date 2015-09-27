@@ -43,6 +43,7 @@ public class MultiUserFragment extends Fragment {
         if (getArguments() != null) {
             recordDb = (RecordDatabase)getArguments().getSerializable(ARG_DB);
         }
+        getActivity().findViewById(R.id.button1);
     }
 
     @Override

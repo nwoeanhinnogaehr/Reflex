@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 /**
@@ -43,6 +44,12 @@ public class StatsFragment extends Fragment {
         if (getArguments() != null) {
             recordDb = (RecordDatabase)getArguments().getSerializable(ARG_DB);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((TextView)getActivity().findViewById(R.id.min_all)).setText("" + recordDb.minLastN(-1));
     }
 
     @Override

@@ -12,4 +12,13 @@
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_all">All</string>
+    <string name="text_last_100">Last 100</string>
+    <string name="text_last_10">Last 10</string>
+    <string name="text_reaction_time_stats">Reaction time stats</string>
+    <string name="text_min">Minimum</string>
+    <string name="text_max">Maximum</string>
+    <string name="text_avg">Average</string>
+    <string name="text_med">Median</string>
+    <string name="text_gameshow_stats">Gameshow buzzer stats</string>
 </resources>

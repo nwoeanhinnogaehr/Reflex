@@ -20,6 +20,7 @@ public class MultiUserFragment extends Fragment {
     private static final String ARG_DB = "database";
 
     private RecordDatabase recordDb;
+    private int numPlayers;
 
     /**
      * Use this factory method to create a new instance of
@@ -79,6 +80,8 @@ public class MultiUserFragment extends Fragment {
 
     private void react(int player) {
         getPlayerButton(player).setBackgroundColor(Color.GREEN);
+        MultiUserRecord record = new MultiUserRecord(numPlayers, player);
+        recordDb.addRecord(record);
         new AlertDialog.Builder(getActivity())
                 .setTitle("Player " + player + " wins.")
                 .setNeutralButton("Next round", new DialogInterface.OnClickListener() {
@@ -141,6 +144,7 @@ public class MultiUserFragment extends Fragment {
     }
 
     private void setNumPlayers(int numPlayers) {
+        this.numPlayers = numPlayers;
         getActivity().findViewById(R.id.button4).setVisibility(View.VISIBLE);
         getActivity().findViewById(R.id.tablerow2).setVisibility(View.VISIBLE);
         if (numPlayers == 3) {

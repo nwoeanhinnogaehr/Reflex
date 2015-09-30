@@ -123,12 +123,12 @@ public class SingleUserFragment extends Fragment {
         }
         timer.react();
         SingleUserRecord record = timer.getRecord();
-        recordDb.addRecord(record);
         AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
         if (!record.isOk()) {
             setColor(Color.RED);
             ad.setTitle("Too quick!");
         } else {
+            recordDb.addRecord(record);
             setColor(Color.BLACK);
             ad.setTitle("COOL!");
         }

@@ -50,6 +50,8 @@ public class StatsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         ((TextView)getActivity().findViewById(R.id.min_all)).setText("" + recordDb.minLastN(-1));
+        ((TextView)getActivity().findViewById(R.id.min_100)).setText("" + recordDb.minLastN(100));
+        ((TextView)getActivity().findViewById(R.id.min_10)).setText("" + recordDb.minLastN(10));
     }
 
     @Override

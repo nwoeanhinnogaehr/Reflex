@@ -33,6 +33,7 @@ public class RecordDatabase implements Serializable {
         if (n == -1) {
             n = suRecords.size();
         }
+        n = Math.min(n, suRecords.size());
         long min = Long.MAX_VALUE;
         for (int i = 0; i < n; i++) {
             int idx = suRecords.size() - i - 1;
@@ -45,6 +46,7 @@ public class RecordDatabase implements Serializable {
         if (n == -1) {
             n = suRecords.size();
         }
+        n = Math.min(n, suRecords.size());
         long max = Long.MIN_VALUE;
         for (int i = 0; i < n; i++) {
             int idx = suRecords.size() - i - 1;
@@ -57,6 +59,7 @@ public class RecordDatabase implements Serializable {
         if (n == -1) {
             n = suRecords.size();
         }
+        n = Math.min(n, suRecords.size());
         long sum = 0;
         for (int i = 0; i < n; i++) {
             int idx = suRecords.size() - i - 1;
@@ -69,6 +72,7 @@ public class RecordDatabase implements Serializable {
         if (n == -1) {
             n = suRecords.size();
         }
+        n = Math.min(n, suRecords.size());
         List<SingleUserRecord> sublist = suRecords.subList(suRecords.size() - n, suRecords.size());
         Collections.sort(sublist);
         int midpoint = sublist.size()/2;

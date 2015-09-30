@@ -26,11 +26,8 @@ public class SingleUserFragment extends Fragment {
     private static final int TRIGGER_EVENT = 1;
 
     private RecordDatabase recordDb;
-    private Random random;
+    private ReactionTimer timer;
     private Handler handler;
-    private long triggerTime;
-    private long tapTime;
-    private boolean tapped;
 
     /**
      * Use this factory method to create a new instance of
@@ -48,7 +45,6 @@ public class SingleUserFragment extends Fragment {
     }
 
     public SingleUserFragment() {
-        random = new Random();
         // http://stackoverflow.com/questions/1877417/how-to-set-a-timer-in-android
         handler = new Handler() {
             @Override
@@ -60,7 +56,7 @@ public class SingleUserFragment extends Fragment {
                 }
             }
         };
-        tapped = false;
+        timer = new ReactionTimer();
     }
 
     @Override
@@ -104,31 +100,29 @@ public class SingleUserFragment extends Fragment {
     }
 
     private void startTimer() {
-        tapped = false;
-        long delay = getRandomDelay();
-        setTriggerDelay(delay);
+        timer.reset();
+        timer.start();
+        setTriggerDelay(timer.getDelay());
     }
 
     private void setTriggerDelay(long delay) {
-        triggerTime = new Date().getTime() + delay;
         Message msg = handler.obtainMessage(TRIGGER_EVENT);
         handler.sendMessageDelayed(msg, delay);
     }
 
     private void trigger() {
-        if (!tapped) {
+        if (!timer.hasReacted()) {
             setColor(Color.GREEN);
         }
     }
 
     private void react() {
-        if (tapped) {
+        if (timer.hasReacted()) {
             showHelp();
             return;
         }
-        tapTime = new Date().getTime();
-        tapped = true;
-        SingleUserRecord record = new SingleUserRecord(triggerTime, tapTime);
+        timer.react();
+        SingleUserRecord record = timer.getRecord();
         recordDb.addRecord(record);
         AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
         if (!record.isOk()) {
@@ -151,9 +145,5 @@ public class SingleUserFragment extends Fragment {
 
     private void setColor(int color) {
         getActivity().findViewById(R.id.button).setBackgroundColor(color);
-    }
-
-    private long getRandomDelay() {
-        return random.nextInt(1990) + 10;
     }
 }

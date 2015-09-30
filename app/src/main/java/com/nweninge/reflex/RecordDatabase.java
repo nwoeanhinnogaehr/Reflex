@@ -84,4 +84,15 @@ public class RecordDatabase implements Serializable {
         }
         return median;
     }
+
+    public int getBuzzerPresses(int numPlayers, int player) {
+        int count = 0;
+        for (int i = 0; i < muRecords.size(); i++) {
+            MultiUserRecord record = muRecords.get(i);
+            if (record.getNumUsers() == numPlayers && record.getFastestUser() == player) {
+                count++;
+            }
+        }
+        return count;
+    }
 }

@@ -61,6 +61,16 @@ public class StatsFragment extends Fragment {
         ((TextView)getActivity().findViewById(R.id.med_all)).setText("" + recordDb.medLastN(-1));
         ((TextView)getActivity().findViewById(R.id.med_100)).setText("" + recordDb.medLastN(100));
         ((TextView)getActivity().findViewById(R.id.med_10)).setText("" + recordDb.medLastN(10));
+
+        ((TextView)getActivity().findViewById(R.id.players_2_1)).setText("" + recordDb.getBuzzerPresses(2, 1));
+        ((TextView)getActivity().findViewById(R.id.players_2_2)).setText("" + recordDb.getBuzzerPresses(2, 2));
+        ((TextView)getActivity().findViewById(R.id.players_3_1)).setText("" + recordDb.getBuzzerPresses(3, 1));
+        ((TextView)getActivity().findViewById(R.id.players_3_2)).setText("" + recordDb.getBuzzerPresses(3, 2));
+        ((TextView)getActivity().findViewById(R.id.players_3_3)).setText("" + recordDb.getBuzzerPresses(3, 3));
+        ((TextView)getActivity().findViewById(R.id.players_4_1)).setText("" + recordDb.getBuzzerPresses(4, 1));
+        ((TextView)getActivity().findViewById(R.id.players_4_2)).setText("" + recordDb.getBuzzerPresses(4, 2));
+        ((TextView)getActivity().findViewById(R.id.players_4_3)).setText("" + recordDb.getBuzzerPresses(4, 3));
+        ((TextView)getActivity().findViewById(R.id.players_4_4)).setText("" + recordDb.getBuzzerPresses(4, 4));
     }
 
     @Override

@@ -52,6 +52,15 @@ public class StatsFragment extends Fragment {
         ((TextView)getActivity().findViewById(R.id.min_all)).setText("" + recordDb.minLastN(-1));
         ((TextView)getActivity().findViewById(R.id.min_100)).setText("" + recordDb.minLastN(100));
         ((TextView)getActivity().findViewById(R.id.min_10)).setText("" + recordDb.minLastN(10));
+        ((TextView)getActivity().findViewById(R.id.max_all)).setText("" + recordDb.maxLastN(-1));
+        ((TextView)getActivity().findViewById(R.id.max_100)).setText("" + recordDb.maxLastN(100));
+        ((TextView)getActivity().findViewById(R.id.max_10)).setText("" + recordDb.maxLastN(10));
+        ((TextView)getActivity().findViewById(R.id.avg_all)).setText("" + recordDb.avgLastN(-1));
+        ((TextView)getActivity().findViewById(R.id.avg_100)).setText("" + recordDb.avgLastN(100));
+        ((TextView)getActivity().findViewById(R.id.avg_10)).setText("" + recordDb.avgLastN(10));
+        ((TextView)getActivity().findViewById(R.id.med_all)).setText("" + recordDb.medLastN(-1));
+        ((TextView)getActivity().findViewById(R.id.med_100)).setText("" + recordDb.medLastN(100));
+        ((TextView)getActivity().findViewById(R.id.med_10)).setText("" + recordDb.medLastN(10));
     }
 
     @Override

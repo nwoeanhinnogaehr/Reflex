@@ -1,5 +1,13 @@
 package com.nweninge.reflex;
 
+import com.google.gson.Gson;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOError;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +35,21 @@ public class RecordDatabase implements Serializable {
     public void clear() {
         suRecords.clear();
         muRecords.clear();
+    }
+
+    public void saveRecords(FileOutputStream fos) throws IOException {
+        Gson gson = new Gson();
+        String json = gson.toJson(this);
+        fos.write(json.getBytes());
+    }
+
+    public void loadRecords(FileInputStream fis) throws IOException {
+        Gson gson = new Gson();
+        InputStreamReader isr = new InputStreamReader(fis);
+        BufferedReader br = new BufferedReader(isr);
+        RecordDatabase db = gson.fromJson(br, RecordDatabase.class);
+        this.suRecords = db.suRecords;
+        this.muRecords = db.muRecords;
     }
 
     public long minLastN(int n) {

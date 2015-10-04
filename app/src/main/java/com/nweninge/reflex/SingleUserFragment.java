@@ -2,6 +2,7 @@ package com.nweninge.reflex;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.io.FileOutputStream;
 import java.util.Date;
 import java.util.Random;
 
@@ -65,6 +67,12 @@ public class SingleUserFragment extends Fragment {
         if (getArguments() != null) {
             recordDb = (RecordDatabase)getArguments().getSerializable(ARG_DB);
         }
+    }
+
+    @Override
+    public void onPause() {
+        handler.removeMessages(TRIGGER_EVENT);
+        super.onPause();
     }
 
     @Override
@@ -141,6 +149,11 @@ public class SingleUserFragment extends Fragment {
             }
         });
         ad.show();
+        try {
+            FileOutputStream fos = getActivity().openFileOutput(MainActivity.FILENAME, Context.MODE_PRIVATE);
+            recordDb.saveRecords(fos);
+            fos.close();
+        } catch (Exception e) { }
     }
 
     private void setColor(int color) {

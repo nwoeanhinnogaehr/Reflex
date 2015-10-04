@@ -19,6 +19,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
@@ -35,6 +38,8 @@ public class MainActivity extends Activity
     private RecordDatabase recordDb;
     private boolean itemSelected = false;
 
+    public static final String FILENAME = "data.json";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +53,12 @@ public class MainActivity extends Activity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        try {
+            FileInputStream fis = openFileInput(FILENAME);
+            recordDb.loadRecords(fis);
+            fis.close();
+        } catch (Exception e) { }
     }
 
     @Override
@@ -81,6 +92,11 @@ public class MainActivity extends Activity
                 .commit();
         getActionBar().setTitle(mTitle);
         itemSelected = true;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     public void restoreActionBar() {

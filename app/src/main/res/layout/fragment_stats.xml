@@ -346,6 +346,18 @@
             </TableRow>
         </TableLayout>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email Stats"
+            android:id="@+id/emailButton" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear Stats"
+            android:id="@+id/clearButton" />
+
     </LinearLayout>
 
 </FrameLayout>

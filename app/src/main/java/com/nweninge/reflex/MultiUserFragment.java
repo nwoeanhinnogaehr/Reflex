@@ -2,6 +2,7 @@ package com.nweninge.reflex;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.io.FileOutputStream;
 
 
 /**
@@ -64,7 +67,7 @@ public class MultiUserFragment extends Fragment {
                 .setItems(new CharSequence[]{"2", "3", "4"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        setNumPlayers(4 - which);
+                        setNumPlayers(which+2);
                         getActivity().findViewById(R.id.tablelayout).setVisibility(View.VISIBLE);
                         showHelp();
                     }
@@ -96,6 +99,11 @@ public class MultiUserFragment extends Fragment {
                         reset();
                     }
                 }).show();
+        try {
+            FileOutputStream fos = getActivity().openFileOutput(MainActivity.FILENAME, Context.MODE_PRIVATE);
+            recordDb.saveRecords(fos);
+            fos.close();
+        } catch (Exception e) { }
     }
 
     private void setReactListeners() {
@@ -149,7 +157,7 @@ public class MultiUserFragment extends Fragment {
         getActivity().findViewById(R.id.tablerow2).setVisibility(View.VISIBLE);
         if (numPlayers == 3) {
             getActivity().findViewById(R.id.button4).setVisibility(View.GONE);
-        } else if (numPlayers == 4) {
+        } else if (numPlayers == 2) {
             getActivity().findViewById(R.id.tablerow2).setVisibility(View.GONE);
         }
     }

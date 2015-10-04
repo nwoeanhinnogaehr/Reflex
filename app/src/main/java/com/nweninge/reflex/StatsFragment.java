@@ -73,10 +73,37 @@ public class StatsFragment extends Fragment {
         getActivity().findViewById(R.id.emailButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent emailIntent = new Intent(Intent.ACTION_SEND, Uri.fromParts("mailto", "", null));
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
-                startActivity(Intent.createChooser(emailIntent, "Send email..."));
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "", null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "nweninge-reflex statistics");
+                StringBuilder sb = new StringBuilder();
+                sb.append("Reaction time stats:");
+                sb.append("\nMinimum (all): "); sb.append(recordDb.minLastN(-1));
+                sb.append("\nMinimum (last 100): "); sb.append(recordDb.minLastN(100));
+                sb.append("\nMinimum (last 10): "); sb.append(recordDb.minLastN(10));
+                sb.append("\nMaximum (all): "); sb.append(recordDb.maxLastN(-1));
+                sb.append("\nMaximum (last 100): "); sb.append(recordDb.maxLastN(100));
+                sb.append("\nMaximum (last 10): "); sb.append(recordDb.maxLastN(10));
+                sb.append("\nAverage (all): "); sb.append(recordDb.avgLastN(-1));
+                sb.append("\nAverage (last 100): "); sb.append(recordDb.avgLastN(100));
+                sb.append("\nAverage (last 10): "); sb.append(recordDb.avgLastN(10));
+                sb.append("\nMedian (all): "); sb.append(recordDb.medLastN(-1));
+                sb.append("\nMedian (last 100): "); sb.append(recordDb.medLastN(100));
+                sb.append("\nMedian (last 10): "); sb.append(recordDb.medLastN(10));
+                sb.append("\n\nGameshow buzzer stats");
+                sb.append("\n2 player mode:");
+                    sb.append("\n\tPlayer 1 fastest: "); sb.append(recordDb.getBuzzerPresses(2, 1));
+                    sb.append("\n\tPlayer 2 fastest: "); sb.append(recordDb.getBuzzerPresses(2, 2));
+                sb.append("\n3 player mode:");
+                    sb.append("\n\tPlayer 1 fastest: "); sb.append(recordDb.getBuzzerPresses(3, 1));
+                    sb.append("\n\tPlayer 2 fastest: "); sb.append(recordDb.getBuzzerPresses(3, 2));
+                    sb.append("\n\tPlayer 3 fastest: "); sb.append(recordDb.getBuzzerPresses(3, 3));
+                sb.append("\n4 player mode:");
+                    sb.append("\n\tPlayer 1 fastest: "); sb.append(recordDb.getBuzzerPresses(4, 1));
+                    sb.append("\n\tPlayer 2 fastest: "); sb.append(recordDb.getBuzzerPresses(4, 2));
+                    sb.append("\n\tPlayer 3 fastest: "); sb.append(recordDb.getBuzzerPresses(4, 3));
+                    sb.append("\n\tPlayer 4 fastest: "); sb.append(recordDb.getBuzzerPresses(4, 4));
+                emailIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
+                startActivity(Intent.createChooser(emailIntent, "Send email"));
             }
         });
     }

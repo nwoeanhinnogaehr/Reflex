@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Reflex</string>
+    <string name="app_name">nweninge-reflex</string>
 
     <string name="title_section1">Reaction timer</string>
     <string name="title_section2">Gameshow buzzer</string>

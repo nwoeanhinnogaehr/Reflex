@@ -1,12 +1,17 @@
 package com.nweninge.reflex;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import java.io.FileOutputStream;
 
 
 /**
@@ -49,6 +54,34 @@ public class StatsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        updateData();
+
+        getActivity().findViewById(R.id.clearButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recordDb.clear();
+                updateData();
+                try {
+                    FileOutputStream fos = getActivity().openFileOutput(MainActivity.FILENAME, Context.MODE_PRIVATE);
+                    recordDb.saveRecords(fos);
+                    fos.close();
+                } catch (Exception e) {
+                }
+            }
+        });
+
+        getActivity().findViewById(R.id.emailButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent emailIntent = new Intent(Intent.ACTION_SEND, Uri.fromParts("mailto", "", null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
+                startActivity(Intent.createChooser(emailIntent, "Send email..."));
+            }
+        });
+    }
+
+    private void updateData() {
         ((TextView)getActivity().findViewById(R.id.min_all)).setText("" + recordDb.minLastN(-1));
         ((TextView)getActivity().findViewById(R.id.min_100)).setText("" + recordDb.minLastN(100));
         ((TextView)getActivity().findViewById(R.id.min_10)).setText("" + recordDb.minLastN(10));
@@ -71,6 +104,7 @@ public class StatsFragment extends Fragment {
         ((TextView)getActivity().findViewById(R.id.players_4_2)).setText("" + recordDb.getBuzzerPresses(4, 2));
         ((TextView)getActivity().findViewById(R.id.players_4_3)).setText("" + recordDb.getBuzzerPresses(4, 3));
         ((TextView)getActivity().findViewById(R.id.players_4_4)).setText("" + recordDb.getBuzzerPresses(4, 4));
+
     }
 
     @Override

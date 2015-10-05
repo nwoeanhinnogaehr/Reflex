@@ -16,13 +16,14 @@ import java.io.IOException;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link StatsFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A fragment to display statistics to the user and allow emailing and clearing them.
  */
 public class StatsFragment extends Fragment {
     private static final String ARG_DB = "database";
 
+    /**
+     * A reference to the record database in MainActivity
+     */
     private RecordDatabase recordDb;
 
     /**
@@ -57,20 +58,21 @@ public class StatsFragment extends Fragment {
         super.onResume();
         updateData();
 
+        // Set the handler for the button to clear the stats
         getActivity().findViewById(R.id.clearButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 recordDb.clear();
                 updateData();
-                try {
-                    recordDb.saveRecords(getActivity());
-                } catch (IOException e) { }
+                recordDb.saveRecords(getActivity());
             }
         });
 
+        // Set the handler for the button to email the stats
         getActivity().findViewById(R.id.emailButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Build the content of the email, and start an intent to send it
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "", null));
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "nweninge-reflex statistics");
                 StringBuilder sb = new StringBuilder();
@@ -106,6 +108,9 @@ public class StatsFragment extends Fragment {
         });
     }
 
+    /**
+     * Updates the data tables on screen with freshly calculated stats
+     */
     private void updateData() {
         ((TextView)getActivity().findViewById(R.id.min_all)).setText("" + recordDb.minLastN(-1));
         ((TextView)getActivity().findViewById(R.id.min_100)).setText("" + recordDb.minLastN(100));

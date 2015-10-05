@@ -3,7 +3,7 @@ package com.nweninge.reflex;
 import java.io.Serializable;
 
 /**
- * Created by nweninge on 9/26/15.
+ * Stores a record of a single round played in the multi user/gameshow buzzer mode.
  */
 public class MultiUserRecord implements Serializable {
     private int numUsers;

@@ -17,15 +17,25 @@ import java.io.IOException;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link MultiUserFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * This fragment is responsible for the UI in the multi user gameshow buzzer mode.
  */
 public class MultiUserFragment extends Fragment {
     private static final String ARG_DB = "database";
 
+    /**
+     * A reference to the global database in MainActivity, for convenience.
+     */
     private RecordDatabase recordDb;
+
+    /**
+     * The number of players in the current game
+     */
     private int numPlayers;
+
+    /**
+     * If a player touches the screen, we set this to true to immediately lock the screen
+     * and prevent other players from touching it afterwards.
+     */
     private boolean lockScreen;
 
     /**
@@ -58,12 +68,16 @@ public class MultiUserFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        // determine the number of players and reset the game
         getActivity().findViewById(R.id.tablelayout).setVisibility(View.INVISIBLE);
         askNumPlayers();
         reset();
         setReactListeners();
     }
 
+    /**
+     * Ask the user how many players should be in this game.
+     */
     private void askNumPlayers() {
         new AlertDialog.Builder(getActivity())
                 .setTitle("How many players?")
@@ -78,6 +92,9 @@ public class MultiUserFragment extends Fragment {
                 .show();
     }
 
+    /**
+     * Reset the state of all the buttons.
+     */
     private void reset() {
         for (int i = 1; i <= 4; i++) {
             getPlayerButton(i).setBackgroundColor(Color.BLACK);
@@ -85,14 +102,22 @@ public class MultiUserFragment extends Fragment {
         lockScreen = false;
     }
 
+    /**
+     * Called when a player touches a button
+     * @param player the player that touched their button
+     */
     private void react(int player) {
+        // if another player was faster in this round, do nothing.
         if (lockScreen) {
             return;
         }
         lockScreen = true;
+
+        // indicate the button was pressed and save a record of it.
         getPlayerButton(player).setBackgroundColor(Color.GREEN);
         MultiUserRecord record = new MultiUserRecord(numPlayers, player);
         recordDb.addRecord(record);
+        recordDb.saveRecords(this.getActivity());
         new AlertDialog.Builder(getActivity())
                 .setTitle("Player " + player + " wins.")
                 .setNeutralButton("Next round", new DialogInterface.OnClickListener() {
@@ -107,11 +132,11 @@ public class MultiUserFragment extends Fragment {
                         reset();
                     }
                 }).show();
-        try {
-            recordDb.saveRecords(this.getActivity());
-        } catch (IOException e) { }
     }
 
+    /**
+     * Hooks up the react method to each button
+     */
     private void setReactListeners() {
         for (int i = 1; i <= 4; i++) {
             final int j = i;
@@ -125,6 +150,9 @@ public class MultiUserFragment extends Fragment {
         }
     }
 
+    /**
+     * Gets the button corresponding to a given player
+     */
     private View getPlayerButton(int player) {
         switch (player) {
             case 1:
@@ -139,6 +167,9 @@ public class MultiUserFragment extends Fragment {
         return null;
     }
 
+    /**
+     * Shows a message describing how to play the game
+     */
     private void showHelp() {
         new AlertDialog.Builder(getActivity())
                 .setTitle("Help")
@@ -151,13 +182,9 @@ public class MultiUserFragment extends Fragment {
                 }).show();
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_multi_user, container, false);
-    }
-
+    /**
+     * Changes the visibility of buttons to reflect a given number of players
+     */
     private void setNumPlayers(int numPlayers) {
         this.numPlayers = numPlayers;
         getActivity().findViewById(R.id.button4).setVisibility(View.VISIBLE);
@@ -167,5 +194,12 @@ public class MultiUserFragment extends Fragment {
         } else if (numPlayers == 2) {
             getActivity().findViewById(R.id.tablerow2).setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_multi_user, container, false);
     }
 }

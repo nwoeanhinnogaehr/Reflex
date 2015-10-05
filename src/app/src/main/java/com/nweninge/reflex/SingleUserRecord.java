@@ -3,7 +3,7 @@ package com.nweninge.reflex;
 import java.io.Serializable;
 
 /**
- * Created by nweninge on 9/26/15.
+ * Stores a record of a single reaction time in single user mode.
  */
 public class SingleUserRecord implements Serializable, Comparable<SingleUserRecord> {
     private long delayTime;
@@ -27,11 +27,16 @@ public class SingleUserRecord implements Serializable, Comparable<SingleUserReco
         return pressTime;
     }
 
+    /**
+     * @return true iff the user pressed the button after the delay
+     */
     public boolean isOk() {
         return pressTime >= delayTime;
     }
 
-    // Closer to zero is better
+    /**
+     * The amount of delay between the trigger, and the user pressing the button, in milliseconds
+     */
     public long getScore() {
         return pressTime - delayTime;
     }

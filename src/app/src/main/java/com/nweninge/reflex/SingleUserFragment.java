@@ -20,16 +20,28 @@ import java.util.Date;
 import java.util.Random;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link SingleUserFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A fragment based UI for recording reaction times.
  */
 public class SingleUserFragment extends Fragment {
     private static final String ARG_DB = "database";
+    /**
+     * The event that fires when the user is supposed to react.
+     */
     private static final int TRIGGER_EVENT = 1;
 
+    /**
+     * A reference to the MainActivity's record database, for convenience.
+     */
     private RecordDatabase recordDb;
+
+    /**
+     * Implements the logic behind the UI.
+     */
     private ReactionTimer timer;
+
+    /**
+     * Used as a callback timer.
+     */
     private Handler handler;
 
     /**
@@ -49,6 +61,7 @@ public class SingleUserFragment extends Fragment {
 
     public SingleUserFragment() {
         // http://stackoverflow.com/questions/1877417/how-to-set-a-timer-in-android
+        // set up the handler to called trigger when it fires.
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -95,6 +108,9 @@ public class SingleUserFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_single_user, container, false);
     }
 
+    /**
+     * Shows a message describing how to use the timer.
+     */
     private void showHelp() {
         new AlertDialog.Builder(getActivity())
                 .setTitle("Help")
@@ -108,36 +124,55 @@ public class SingleUserFragment extends Fragment {
                 }).show();
     }
 
+    /**
+     * Starts the timer and sets the trigger to fire after the random delay.
+     */
     private void startTimer() {
         timer.reset();
         timer.start();
         setTriggerDelay(timer.getDelay());
     }
 
+    /**
+     * Sets the trigger to fire after a given amount of delay.
+     */
     private void setTriggerDelay(long delay) {
         Message msg = handler.obtainMessage(TRIGGER_EVENT);
         handler.sendMessageDelayed(msg, delay);
     }
 
+    /**
+     * Called by the handler when the user is supposed to react.
+     */
     private void trigger() {
         if (!timer.hasReacted()) {
             setColor(Color.GREEN);
         }
     }
 
+
+    /**
+     * Called when the user reacts to the trigger
+     */
     private void react() {
+        // If this round is already over, we need to reset
         if (timer.hasReacted()) {
             showHelp();
             return;
         }
+
+        // Record the reaction time and show it to the user.
         timer.react();
         SingleUserRecord record = timer.getRecord();
         AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
         if (!record.isOk()) {
+            // The user pressed the button before the trigger
             setColor(Color.RED);
             ad.setTitle("Too quick!");
         } else {
+            // The user was successful
             recordDb.addRecord(record);
+            recordDb.saveRecords(this.getActivity());
             setColor(Color.BLACK);
             ad.setTitle("COOL!");
         }
@@ -150,11 +185,12 @@ public class SingleUserFragment extends Fragment {
             }
         });
         ad.show();
-        try {
-            recordDb.saveRecords(this.getActivity());
-        } catch (IOException e) { }
     }
 
+    /**
+     * Sets the colour of the screen to a given colour. Used as an indicator of the state of the
+     * timer.
+     */
     private void setColor(int color) {
         getActivity().findViewById(R.id.button).setBackgroundColor(color);
     }

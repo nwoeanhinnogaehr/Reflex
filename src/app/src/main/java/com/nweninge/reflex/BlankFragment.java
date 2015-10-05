@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A blank fragment which is initially loaded in the background when the application is opened.
+ * Does nothing.
  */
 public class BlankFragment extends Fragment {
 

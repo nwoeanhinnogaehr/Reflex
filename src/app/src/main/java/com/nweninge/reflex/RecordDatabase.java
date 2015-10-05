@@ -1,7 +1,9 @@
 package com.nweninge.reflex;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.google.gson.Gson;
@@ -18,12 +20,19 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by nweninge on 9/26/15.
+ * Manages records and statistics for the app, and provides functions for saving/restoring data
+ * from disk, calculating specific statistics, adding and clearing data.
  */
 public class RecordDatabase implements Serializable {
     public static final String FILENAME = "data.json";
 
+    /**
+     * Records from single user mode
+     */
     private List<SingleUserRecord> suRecords;
+    /**
+     * Records from multi user mode
+     */
     private List<MultiUserRecord> muRecords;
 
     public RecordDatabase() {
@@ -31,37 +40,74 @@ public class RecordDatabase implements Serializable {
         muRecords = new ArrayList<MultiUserRecord>();
     }
 
+    /**
+     * Adds a new single user/reaction time record to the database.
+     */
     public void addRecord(SingleUserRecord record) {
         suRecords.add(record);
     }
+    /**
+     * Adds a new multi user/gameshow buzzer record to the database.
+     */
     public void addRecord(MultiUserRecord record) {
         muRecords.add(record);
     }
 
+    /**
+     * Completely clears all records from the database
+     */
     public void clear() {
         suRecords.clear();
         muRecords.clear();
     }
 
-    public void saveRecords(Activity activity) throws IOException {
-        FileOutputStream fos = activity.openFileOutput(FILENAME, Context.MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = gson.toJson(this);
-        fos.write(json.getBytes());
-        fos.close();
+    /**
+     * Saves records to disk
+     * @param activity the activity to use for file IO.
+     */
+    public void saveRecords(Activity activity) {
+        try {
+            FileOutputStream fos = activity.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            Gson gson = new Gson();
+            String json = gson.toJson(this);
+            fos.write(json.getBytes());
+            fos.close();
+        } catch (Exception e) {
+            new AlertDialog.Builder(activity)
+                    .setTitle("Error saving statistics!!")
+                    .setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+        }
     }
 
-    public void loadRecords(Activity activity) throws IOException {
-        FileInputStream fis = activity.openFileInput(FILENAME);
-        Gson gson = new Gson();
-        InputStreamReader isr = new InputStreamReader(fis);
-        BufferedReader br = new BufferedReader(isr);
-        RecordDatabase db = gson.fromJson(br, RecordDatabase.class);
-        this.suRecords = db.suRecords;
-        this.muRecords = db.muRecords;
-        fis.close();
+    /**
+     * Loads records from the disk, replacing any currently in the database.
+     * @param activity the activity to use for file IO.
+     */
+    public void loadRecords(Activity activity) {
+        try {
+            FileInputStream fis = activity.openFileInput(FILENAME);
+            Gson gson = new Gson();
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            RecordDatabase db = gson.fromJson(br, RecordDatabase.class);
+            this.suRecords = db.suRecords;
+            this.muRecords = db.muRecords;
+            fis.close();
+        } catch (Exception e) {
+            // if we couldn't load them, it probably means they didn't exist.
+        }
     }
 
+    /**
+     * Calculate the minimum reaction time score of the last n entries.
+     * @param n The number of entries to include. -1 includes all entries
+     * @return The minimum score seen.
+     */
     public long minLastN(int n) {
         if (n == -1) {
             n = suRecords.size();
@@ -76,6 +122,11 @@ public class RecordDatabase implements Serializable {
         return min;
     }
 
+    /**
+     * Calculate the maximum reaction time score of the last n entries.
+     * @param n The number of entries to include. -1 includes all entries
+     * @return The maximum score seen.
+     */
     public long maxLastN(int n) {
         if (n == -1) {
             n = suRecords.size();
@@ -90,6 +141,11 @@ public class RecordDatabase implements Serializable {
         return max;
     }
 
+    /**
+     * Calculate the average reaction time score of the last n entries.
+     * @param n The number of entries to include. -1 includes all entries
+     * @return The average score.
+     */
     public long avgLastN(int n) {
         if (n == -1) {
             n = suRecords.size();
@@ -104,6 +160,11 @@ public class RecordDatabase implements Serializable {
         return sum/n;
     }
 
+    /**
+     * Calculate the median reaction time score of the last n entries.
+     * @param n The number of entries to include. -1 includes all entries
+     * @return The median score.
+     */
     public long medLastN(int n) {
         if (n == -1) {
             n = suRecords.size();
@@ -122,6 +183,13 @@ public class RecordDatabase implements Serializable {
         return median;
     }
 
+    /**
+     * Calculate the number of times a given player pressed the button first, with a given
+     * number of players.
+     * @param numPlayers the number of players in the game
+     * @param player the fastest player in the game
+     * @return the number of presses with the given constraints
+     */
     public int getBuzzerPresses(int numPlayers, int player) {
         int count = 0;
         for (int i = 0; i < muRecords.size(); i++) {

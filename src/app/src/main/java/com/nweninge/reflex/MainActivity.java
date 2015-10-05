@@ -23,6 +23,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * The main activity that contains the fragments for the 3 different parts of the application.
+ * Implemented using a navigation drawer.
+ */
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
@@ -36,7 +40,15 @@ public class MainActivity extends Activity
      */
     private CharSequence mTitle;
 
+    /**
+     * A database storing and keeping track of statistics from the app.
+     */
     private RecordDatabase recordDb;
+
+    /**
+     * True if the the user has selected something on the menu yet, false if they have not.
+     * Used to determine if we should show the blank fragment or one of the others.
+     */
     private boolean itemSelected = false;
 
     @Override
@@ -46,16 +58,14 @@ public class MainActivity extends Activity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        recordDb = new RecordDatabase();
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        try {
-            recordDb.loadRecords(this);
-        } catch (IOException e) { }
+        recordDb = new RecordDatabase();
+        recordDb.loadRecords(this);
     }
 
     @Override
@@ -87,13 +97,9 @@ public class MainActivity extends Activity
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit();
+        // change the title of the activity depending on which option was selected
         getActionBar().setTitle(mTitle);
         itemSelected = true;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
     }
 
     public void restoreActionBar() {

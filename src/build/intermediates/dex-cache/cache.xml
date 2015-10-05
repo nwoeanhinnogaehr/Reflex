@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/home/trypt/Android/Sdk/extras/android/m2repository/com/android/support/support-v4/18.0.0/support-v4-18.0.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="44ec51e9d395a47aab135e5e1b556c0007442156">
+        <dex dex="/home/trypt/school/cmput/301/Reflex/app/build/intermediates/pre-dexed/debug/support-v4-18.0.0-c4a885dbbacc6f6a26cf3752cf1faa861e298866.jar" />
+    </item>
+    <item
+        jar="/home/trypt/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.4/695b63d702f505b9b916e02272e3b6381bade7f/gson-2.4.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="0695b63d702f505b9b916e02272e3b6381bade7f">
+        <dex dex="/home/trypt/school/cmput/301/Reflex/app/build/intermediates/pre-dexed/debug/gson-2.4-04788c4a8c1765ba300cf4f85e464e2a9e8908bb.jar" />
+    </item>
+
+</items>

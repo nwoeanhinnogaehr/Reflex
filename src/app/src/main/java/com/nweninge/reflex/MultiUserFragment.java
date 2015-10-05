@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -25,6 +26,7 @@ public class MultiUserFragment extends Fragment {
 
     private RecordDatabase recordDb;
     private int numPlayers;
+    private boolean lockScreen;
 
     /**
      * Use this factory method to create a new instance of
@@ -80,9 +82,14 @@ public class MultiUserFragment extends Fragment {
         for (int i = 1; i <= 4; i++) {
             getPlayerButton(i).setBackgroundColor(Color.BLACK);
         }
+        lockScreen = false;
     }
 
     private void react(int player) {
+        if (lockScreen) {
+            return;
+        }
+        lockScreen = true;
         getPlayerButton(player).setBackgroundColor(Color.GREEN);
         MultiUserRecord record = new MultiUserRecord(numPlayers, player);
         recordDb.addRecord(record);
@@ -108,10 +115,11 @@ public class MultiUserFragment extends Fragment {
     private void setReactListeners() {
         for (int i = 1; i <= 4; i++) {
             final int j = i;
-            getPlayerButton(i).setOnClickListener(new View.OnClickListener() {
+            getPlayerButton(i).setOnTouchListener(new View.OnTouchListener() {
                 @Override
-                public void onClick(View v) {
+                public boolean onTouch(View v, MotionEvent event) {
                     react(j);
+                    return true;
                 }
             });
         }

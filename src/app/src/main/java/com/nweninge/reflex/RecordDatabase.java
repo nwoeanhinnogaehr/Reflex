@@ -171,6 +171,7 @@ public class RecordDatabase implements Serializable {
         }
         n = Math.min(n, suRecords.size());
         if (n == 0) return 0;
+        if (n == 1) return suRecords.get(0).getScore();
         List<SingleUserRecord> sublist = suRecords.subList(suRecords.size() - n, suRecords.size());
         Collections.sort(sublist);
         int midpoint = sublist.size()/2;

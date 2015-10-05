@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 
 /**
@@ -62,11 +63,8 @@ public class StatsFragment extends Fragment {
                 recordDb.clear();
                 updateData();
                 try {
-                    FileOutputStream fos = getActivity().openFileOutput(MainActivity.FILENAME, Context.MODE_PRIVATE);
-                    recordDb.saveRecords(fos);
-                    fos.close();
-                } catch (Exception e) {
-                }
+                    recordDb.saveRecords(getActivity());
+                } catch (IOException e) { }
             }
         });
 

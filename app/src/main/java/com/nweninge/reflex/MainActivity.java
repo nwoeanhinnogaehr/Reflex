@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -38,8 +39,6 @@ public class MainActivity extends Activity
     private RecordDatabase recordDb;
     private boolean itemSelected = false;
 
-    public static final String FILENAME = "data.json";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,10 +54,8 @@ public class MainActivity extends Activity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
         try {
-            FileInputStream fis = openFileInput(FILENAME);
-            recordDb.loadRecords(fis);
-            fis.close();
-        } catch (Exception e) { }
+            recordDb.loadRecords(this);
+        } catch (IOException e) { }
     }
 
     @Override

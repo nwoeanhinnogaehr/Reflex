@@ -1,5 +1,9 @@
 package com.nweninge.reflex;
 
+import android.app.Activity;
+import android.content.Context;
+import android.test.ActivityInstrumentationTestCase2;
+
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -17,6 +21,8 @@ import java.util.List;
  * Created by nweninge on 9/26/15.
  */
 public class RecordDatabase implements Serializable {
+    public static final String FILENAME = "data.json";
+
     private List<SingleUserRecord> suRecords;
     private List<MultiUserRecord> muRecords;
 
@@ -37,19 +43,23 @@ public class RecordDatabase implements Serializable {
         muRecords.clear();
     }
 
-    public void saveRecords(FileOutputStream fos) throws IOException {
+    public void saveRecords(Activity activity) throws IOException {
+        FileOutputStream fos = activity.openFileOutput(FILENAME, Context.MODE_PRIVATE);
         Gson gson = new Gson();
         String json = gson.toJson(this);
         fos.write(json.getBytes());
+        fos.close();
     }
 
-    public void loadRecords(FileInputStream fis) throws IOException {
+    public void loadRecords(Activity activity) throws IOException {
+        FileInputStream fis = activity.openFileInput(FILENAME);
         Gson gson = new Gson();
         InputStreamReader isr = new InputStreamReader(fis);
         BufferedReader br = new BufferedReader(isr);
         RecordDatabase db = gson.fromJson(br, RecordDatabase.class);
         this.suRecords = db.suRecords;
         this.muRecords = db.muRecords;
+        fis.close();
     }
 
     public long minLastN(int n) {

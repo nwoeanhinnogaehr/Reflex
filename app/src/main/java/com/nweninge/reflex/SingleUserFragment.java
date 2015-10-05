@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Random;
 
@@ -150,10 +151,8 @@ public class SingleUserFragment extends Fragment {
         });
         ad.show();
         try {
-            FileOutputStream fos = getActivity().openFileOutput(MainActivity.FILENAME, Context.MODE_PRIVATE);
-            recordDb.saveRecords(fos);
-            fos.close();
-        } catch (Exception e) { }
+            recordDb.saveRecords(this.getActivity());
+        } catch (IOException e) { }
     }
 
     private void setColor(int color) {

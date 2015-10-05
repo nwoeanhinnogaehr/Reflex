@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 
 /**
@@ -100,10 +101,8 @@ public class MultiUserFragment extends Fragment {
                     }
                 }).show();
         try {
-            FileOutputStream fos = getActivity().openFileOutput(MainActivity.FILENAME, Context.MODE_PRIVATE);
-            recordDb.saveRecords(fos);
-            fos.close();
-        } catch (Exception e) { }
+            recordDb.saveRecords(this.getActivity());
+        } catch (IOException e) { }
     }
 
     private void setReactListeners() {
